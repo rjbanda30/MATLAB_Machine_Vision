@@ -1,0 +1,27 @@
+%% Load Sample Frames
+clear all;
+
+I = imread ('rec1.jpg')
+subplot(1,2,1)
+imshow(I)
+title('Pic')
+
+grayFrame = im2gray(I)
+subplot(1,2,2)
+imshow(grayFrame)
+title('Grayscale Frame')
+
+
+features = detectMinEigenFeatures(grayFrame);
+subplot(1,2,1)
+imshow(I)
+hold on
+plot(features)
+title('Showing All Features')
+
+specFeatures = selectStrongest(features,1000)
+subplot(1,2,2)
+imshow(I)
+hold on
+plot(specFeatures)
+title('Strongest 100')
