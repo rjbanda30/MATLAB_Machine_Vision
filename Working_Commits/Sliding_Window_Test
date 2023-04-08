@@ -1,0 +1,87 @@
+%% Load Sample Frames
+clear all;
+
+% I = imread ('rec1.jpg')
+% subplot(1,2,1)
+% imshow(I)
+% title('Pic')
+% 
+% grayFrame = im2gray(I)
+% subplot(1,2,2)
+% imshow(grayFrame)
+% title('Grayscale Frame')
+% 
+% 
+% features = detectMinEigenFeatures(grayFrame);
+% subplot(1,2,1)
+% imshow(I)
+% hold on
+% plot(features)
+% title('Showing All Features')
+% 
+% specFeatures = selectStrongest(features,1000)
+% subplot(1,2,2)
+% imshow(I)
+% hold on
+% plot(specFeatures)
+% title('Strongest 100')
+
+% Read the image
+img = rgb2gray(imread('rec1.jpg'))
+
+% Add salt-and-pepper noise to the image
+noisy_img = imnoise(img, 'salt & pepper', 0.02);
+
+% Apply median filtering to remove the noise
+filtered_img = medfilt2(noisy_img,[5 5]);
+
+% Detect corners using the Harris algorithm
+corners = detectHarrisFeatures(filtered_img);
+
+% Extract features from the corners
+features = extractFeatures(filtered_img, corners);
+
+% Train a k-nearest neighbors classifier
+num_neighbors = 3;
+classifier = fitcknn(features, {'component', 'non-component'}, 'NumNeighbors', num_neighbors);
+
+% Define the sliding window size and step size
+window_size = [50, 50];
+step_size = 25;
+
+% Slide the window over the image and classify each window
+[y_max, x_max] = size(filtered_img);
+for y = 1:step_size:y_max-window_size(1)
+    for x = 1:step_size:x_max-window_size(2)
+        % Extract the window from the image
+        window = filtered_img(y:y+window_size(1)-1, x:x+window_size(2)-1);
+        
+        % Detect corners in the window
+        window_corners = detectHarrisFeatures(window);
+        
+        % Extract features from the corners
+        window_features = extractFeatures(window, window_corners);
+        
+        % Classify the window using the trained classifier
+        class = predict(classifier, window_features);
+        
+        % Display the window and classification result
+        figure(1);
+        imshow(window);
+        title(sprintf('Classification: %s', class));
+        drawnow;
+    end
+end
+
+% 
+% % Display the original and filtered images
+% figure;
+% subplot(1, 2, 1);
+% imshow(noisy_img);
+% title('Noisy Image');
+% subplot(1, 2, 2);
+% imshow(filtered_img);
+% title('Filtered Image');
+
+
+
