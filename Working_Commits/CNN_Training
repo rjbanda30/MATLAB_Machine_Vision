@@ -1,0 +1,76 @@
+clear all;
+close all;
+% % Converts features to gray frame
+% 
+%I0 = imread ('rec1.jpg')
+% I1 = rgb2gray(I0)
+% 
+% I_pts = detectSURFFeatures(I1)
+% [I_features, I_valid_Pts] = extractFeatures(I1,I_pts)
+%figure;imshow(I0);
+% hold on; plot(I_pts.selectStrongest(50))
+
+File_Path = "C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/RGB_IC_Data_470X470";
+Digit_Data_Set_Path = fullfile(File_Path)
+imds = imageDatastore(Digit_Data_Set_Path,'IncludeSubfolders',false,'LabelSource','foldernames')
+
+%figure; imshow(imds.Files{1000})
+%img = imresize(I0, [164, 326])
+%imshow(img)
+% Split the trainging data
+Frac_Train_Files = 0.6
+Frac_Val_Files = 0.2
+Frac_Test_Files = 0.2
+[Imds_Train, Imds_Validation,Imds_Test] = splitEachLabel(imds, Frac_Train_Files,Frac_Val_Files,Frac_Test_Files,'randomize');
+
+Layers = [
+% Defines the input layer as a 28x28 pixels with a three colored channel 
+    imageInputLayer([470 470 3])
+
+% Defines a convolusional 2D Filter; Here defined as a ten 3x3 filter
+% There are 9 parameters plus one bias parameter; This is 10 parameters/filter
+% This creates ten filters; each contains 10 28x28 matrices plus the 1 bias
+    convolution2dLayer(3,10,'Padding','same')
+
+% Normalizes the batch layers
+    batchNormalizationLayer
+
+% Creates a Relu Layer that creates a activation function that introduces
+% none-linearity into the system by making any value less than zero equal
+% to zero and keeping any value above zero its original value
+    reluLayer
+
+% Decreases size of internal networks by compressing to a max 2D layer to
+% keep computations and memory low. This is now a 10 channel 14x14 network
+    maxPooling2dLayer(2,'Stride',2)
+
+% This creates ten filters; each contains 10 3x3 matrices plus the 1 bias
+% This creates one inpute parameter for each input channel
+    convolution2dLayer(3,10,'Padding','same')
+
+% Normalizes the batch layers
+    batchNormalizationLayer
+
+% Creates anoter Relu Layer that creates a activation function that introduces
+% none-linearity into the system by making any value less than zero equal
+% to zero and keeping any value above zero its original value
+    reluLayer
+
+% creates an output structure that forms 10 (0-10) classes assigning them
+% to nodes
+    fullyConnectedLayer(1)
+
+% Assigns cos function and ensure popability are computed correctly
+    softmaxLayer
+    classificationLayer
+]
+
+options = trainingOptions('sgdm',...
+    'InitialLearnRate', 0.01,...
+    'MaxEpoch',100, 'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'ValidationFrequency', 30,...
+    'Verbose', false,...
+    'Plots','training-progress')
+
+net = trainNetwork(Imds_Train,Layers, options)
