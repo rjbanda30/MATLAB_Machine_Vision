@@ -81,7 +81,7 @@ end
 % title('Noisy Image');
 % subplot(1, 2, 2);
 % imshow(filtered_img);
-% title('Filtered Image');
+% title('Filtered Image')
 
 
 
