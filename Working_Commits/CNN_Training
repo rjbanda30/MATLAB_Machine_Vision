@@ -73,3 +73,11 @@ options = trainingOptions('sgdm',...
     'Plots','training-progress')
 
 net = trainNetwork(Imds_Train,Layers, options)
+%reads new image
+img = imread('rec1_output.jpg')
+% Predicts
+predicted_class = classify(net,img)
+% shows....The new images need to be of 470x470 size. the resizing blurs the quality of the high quality images and need some preprocessing to make work better. 
+% We may need to find a more robust solution to resizing all images to 470x470.
+imshow(img)
+title(predicted_class)
