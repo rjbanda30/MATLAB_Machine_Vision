@@ -1,1 +1,90 @@
-Place Here
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/3.png';
+I = imread (path);
+subplot(4,2,1);
+imshow(I)
+title('Fast Features RGB 1');
+
+HF_Gray = im2gray(I);
+subplot(4,2,2);
+imshow(HF_Gray);
+
+
+% Filter Size must be greater than 3
+% Filtering assist in 
+points = detectHarrisFeatures(HF_Gray,'MinQuality',0.00001,'ROI',[50, 50, 300,300],'FilterSize',23);
+strongest = selectStrongest(points,200);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 1');
+strongest.Location;
+
+
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
+I = imread (path);
+subplot(4,2,3);
+imshow(I);
+title('Fast Features RGB 2');
+
+HF_Gray = im2gray(I);
+subplot(4,2,4);
+imshow(HF_Gray);
+
+% Filter Size must be greater than 3
+% Filtering assist in 
+points = detectHarrisFeatures(HF_Gray,'MinQuality',0.00001,'ROI',[50, 50, 350,350],'FilterSize',23);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 2');
+strongest.Location;
+
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/935.png';
+I = imread (path);
+subplot(4,2,5);
+imshow(I)
+title('Fast Features RGB 3');
+
+HF_Gray = im2gray(I);
+subplot(4,2,6);
+imshow(HF_Gray);
+
+% Filter Size must be greater than 3
+% Filtering assist in 
+points = detectHarrisFeatures(HF_Gray,'MinQuality',0.00001,'ROI',[50, 50, 350,350],'FilterSize',23);
+strongest = selectStrongest(points,200);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 3');
+strongest.Location;
+
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470_570/39.png';
+I = imread (path);
+subplot(4,2,7);
+imshow(I)
+title('Fast Features RGB 4');
+
+HF_Gray = im2gray(I);
+subplot(4,2,8);
+imshow(HF_Gray);
+
+% Filter Size must be greater than 3
+% Filtering assist in 
+points = detectHarrisFeatures(HF_Gray,'MinQuality',0.00001,'ROI',[50, 50, 400,400],'FilterSize',35);
+strongest = selectStrongest(points,100);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 4');
+strongest.Location;
+
+Harris Features seem best for its filtering background and finding letters
+
+
+
