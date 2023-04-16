@@ -1,99 +1,132 @@
-%% Load Sample Frames
-clear all;
-
-I = imread ('rec1.jpg')
-subplot(1,2,1)
-imshow(I)
-title('Pic')
-
-grayFrame = im2gray(I)
-subplot(1,2,2)
-imshow(grayFrame)
-title('Grayscale Frame')
-
-points = detectBRISKFeatures(I,MinContrast)
-imshow(I)
-hold on
-plot(points.selctStrongest(100))
-
-
+% % Load Sample Frames
+% clear all;
+% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
+% I = imread (path);
+% subplot(1,2,1);
+% imshow(I)
+% title('Pic');
+% 
+% grayFrame = im2gray(I);
+% subplot(1,2,2);
+% imshow(grayFrame);
+% title('Grayscale Frame');
+% 
+% points = detectBRISKFeatures(grayFrame);
+% strongest = selectStrongest(points,10);
+% imshow(I);hold on;
+% plot(strongest);
+% strongest.Location;
+% 
+% 
+% 
 % Increasing MinQuality value reduces the number of edge detections
-points = detectBRISKFeatures(I,MinContrast,0.1)
-imshow(I)
-hold on
-plot(points.selctStrongest(90))
+% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/3.png';
+% I = imread (path);
+% subplot(1,2,1);
+% imshow(I)
+% title('Pic');
+% grayFrame = im2gray(I);
+% subplot(1,2,2);
+% imshow(grayFrame);
+% title('Grayscale Frame');
+% points = detectBRISKFeatures(grayFrame,'MinContrast',0.02);
+% strongest = selectStrongest(points,20);
+% imshow(grayFrame);hold on
+% plot(strongest);
+% 
+% Increasing MinQuality value reduces the number of edge detections
+% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/37.png';
+% I = imread (path);
+% subplot(1,2,1);
+% imshow(I)
+% title('Pic');
+% grayFrame = im2gray(I);
+% subplot(1,2,2);
+% imshow(grayFrame);
+% title('Grayscale Frame');
+% points = detectBRISKFeatures(grayFrame,'MinContrast',0.03);
+% strongest = selectStrongest(points,20);
+% imshow(grayFrame);hold on
+% plot(strongest);
+% 
+% Increasing MinQuality value reduces the number of edge detections
+% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/922.png';
+% I = imread (path);
+% subplot(1,2,1);
+% imshow(I)
+% title('Pic');
+% grayFrame = im2gray(I);
+% subplot(1,2,2);
+% imshow(grayFrame);
+% title('Grayscale Frame');
+% points = detectBRISKFeatures(grayFrame,'MinContrast',0.01);
+% strongest = selectStrongest(points,20);
+% imshow(grayFrame);hold on
+% plot(strongest);
 
-points = detectBRISKFeatures(I,MinContrast,0.2)
-imshow(I)
-hold on
-plot(points.selctStrongest(80))
-
-points = detectBRISKFeatures(I,MinContrast,0.3)
-imshow(I)
-hold on
-plot(points.selctStrongest(70))
-
-points = detectBRISKFeatures(I,MinContrast,0.4)
-imshow(I)
-hold on
-plot(points.selctStrongest(60))
-
-points = detectBRISKFeatures(I,MinContrast,0.5)
-imshow(I)
-hold on
-plot(points.selctStrongest(50))
 
 
 % Increasing MinQuality value reduces erroneous edge detections
-points = detectBRISKFeatures(I,MinQuality,1) 
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1185.png';
+I = imread (path);
+subplot(1,2,1);
 imshow(I)
-hold on
-plot(points.selctStrongest(50))
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+points = detectBRISKFeatures(grayFrame,'MinQuality',0.1) 
+imshow(I);hold on
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
 
-points = detectBRISKFeatures(I,MinQuality,0.9) 
+% Increasing MinQuality value reduces erroneous edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1102.png';
+I = imread (path);
+subplot(1,2,1);
 imshow(I)
-hold on
-plot(points.selctStrongest(50))
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+points = detectBRISKFeatures(grayFrame,'MinQuality',0.1) 
+imshow(I);hold on
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
 
-points = detectBRISKFeatures(I,MinQuality,0.8) 
+% Increasing MinQuality value reduces erroneous edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1176.png';
+I = imread (path);
+subplot(1,2,1);
 imshow(I)
-hold on
-plot(points.selctStrongest(50))
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+points = detectBRISKFeatures(grayFrame,'MinQuality',0.1) 
+imshow(I);hold on
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
 
-points = detectBRISKFeatures(I,MinQuality,0.7) 
+% Increasing MinQuality value reduces erroneous edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
+I = imread (path);
+subplot(1,2,1);
 imshow(I)
-hold on
-plot(points.selctStrongest(50))
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+points = detectBRISKFeatures(grayFrame,'MinQuality',0.0001) 
+imshow(I);hold on
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
 
-points = detectBRISKFeatures(I,MinQuality,0.6) 
-imshow(I)
-hold on
-plot(points.selctStrongest(50))
+
+%%%%%%%%%********************* Brisk Features seem best for finding high contrast areas like Pins *****************%%%%%%%%%%%
 
 
-
-
-% 
-% subplot(1,2,1)
-% imshow(I)
-% title('Pic')
-% 
-% grayFrame = im2gray(I)
-% subplot(1,2,2)
-% imshow(grayFrame)
-% title('Grayscale Frame')
-% 
-% 
-% features = detectMinEigenFeatures(grayFrame);
-% subplot(1,2,1)
-% imshow(I)
-% hold on
-% plot(features)
-% title('Showing All Features')
-% 
-% specFeatures = selectStrongest(features,1000)
-% subplot(1,2,2)
-% imshow(I)
-% hold on
-% plot(specFeatures)
-% title('Strongest 100')
