@@ -1,0 +1,30 @@
+clear all;
+% Selects Directory
+imagefiles = dir('C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/IC_Data/*.png')
+nfiles = length(imagefiles);
+% Steps through images of the directory
+for ii=1:nfiles
+   currentfilename = imagefiles(ii).name;
+   currentimage = imread(currentfilename);
+   image = size(currentimage);
+   % Varible used to keep track of file number during debugging
+   File_Number = int2str(ii)
+   L = image(1);
+   W = image(2);
+   C = image(3);
+% If the image is within 100 units of width, make it a square image, else resize to rectangle   
+   if( (L-50) <= W || W >= (L+50))
+        results = imresize(currentimage,[470,470]);
+        File_Path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Resizeimage_Sqr/';
+        New_Resized_Image = strcat(File_Path,File_Number);
+        New_Resized_Image0 = strcat(New_Resized_Image,'.png');
+        imwrite(results,New_Resized_Image0);        
+   else
+        results = imresize(currentimage,[470,570]);
+        File_Path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Resizeimage_Rec/';
+        New_Resized_Image = strcat(File_Path,File_Number);
+        New_Resized_Image0 = strcat(New_Resized_Image,'.png');
+        imwrite(results,New_Resized_Image0);
+   end
+end
+
