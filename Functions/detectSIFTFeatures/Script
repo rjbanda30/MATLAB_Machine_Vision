@@ -65,7 +65,7 @@ points = detectSIFTFeatures(I);
 
 imshow(I)
 hold on
-plot(points.selectStrongest(10))
+plot(points.selectStrongest(50))
 hold off
 
 
