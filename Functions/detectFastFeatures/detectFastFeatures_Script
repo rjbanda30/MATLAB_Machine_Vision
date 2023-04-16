@@ -55,7 +55,7 @@ imshow(I);hold on;
 plot(strongest);
 strongest.Location;
 
-<img src="Combo_FF_0.png">
+<img src="470x470_Images/1.png">
 
 
 %% **********************Fast Features seem best for finding high contrast areas like Pins********************
