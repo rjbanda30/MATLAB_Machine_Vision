@@ -1,1 +1,75 @@
+clear all;
+
+% I0 = imread ('D:\EE529\Matlab\Machine_Vision\Resizeimage_Sqr\image_9007.png')
+% [featureVector,hogVisualization] = extractHOGFeatures(I0)
+% figure;
+% imshow(I0); 
+% hold on;
+% plot(hogVisualization);
+% 
+% % I1 = imread ('image_7788_output.png')
+% % [featureVector,hogVisualization] = extractHOGFeatures(I1)
+% % figure;
+% % imshow(I1); 
+% % hold on;
+% % plot(hogVisualization);
+% 
+% I = imread ('D:\EE529\Matlab\Machine_Vision\Resizeimage_Sqr\image_9007.png')
+% [hog1,visualization] = extractHOGFeatures(I0,'CellSize',[32 32]);
+% subplot(1,2,1);
+% imshow(I0);
+% subplot(1,2,2);
+% plot(visualization);
+% 
+% I = imread ('D:\EE529\Matlab\Machine_Vision\Resizeimage_Sqr\image_9007.png')
+% corners   = detectFASTFeatures(im2gray(I0));
+% strongest = selectStrongest(corners,3);
+% [hog2,validPoints,ptVis] = extractHOGFeatures(I0,strongest);
+% figure;
+% imshow(I0);
+% hold on;
+% plot(ptVis,'Color','green');
+% 
+% 
+% subplot(1,2,1)
+% imshow(I)
+% title('Pic')
+% 
+% grayFrame = im2gray(I)
+% subplot(1,2,2)
+% imshow(grayFrame)
+% title('Grayscale Frame')
+% 
+% 
+% features = detectMinEigenFeatures(grayFrame);
+% subplot(1,2,1)
+% imshow(I)
+% hold on
+% plot(features)
+% title('Showing All Features')
+% 
+% specFeatures = selectStrongest(features,1000)
+% subplot(1,2,2)
+% imshow(I)
+% hold on
+% plot(specFeatures)
+% title('Strongest 100')
+
+I = imread('D:\EE529\Matlab\Machine_Vision\Resizeimage_Sqr\image_45658.png'); % High-res, square
+grayFrame = im2gray(I)
+regions = detectMSERFeatures(grayFrame);
+
+figure; imshow(I); hold on;
+plot(regions,'showPixelList',true,'showEllipses',false);
+
+figure; imshow(I); 
+hold on;
+plot(regions);
+
+[regions,mserCC] = detectMSERFeatures(grayFrame);
+
+stats = regionprops('table',mserCC,'Eccentricity')
+
+eccentricityIdx = stats.Eccentricity < 0.55
+circularRegions = regions(eccentricityIdx)
 
