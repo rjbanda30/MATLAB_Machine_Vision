@@ -68,4 +68,3 @@ imshow(I)
 hold on
 plot(points.selectStrongest(50))
 hold off
-
