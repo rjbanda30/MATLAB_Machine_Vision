@@ -1,0 +1,60 @@
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Fast Features RGB');
+
+FF_Gray = im2gray(I);
+subplot(1,2,2);
+imshow(FF_Gray);
+title('Grayscale Frame');
+
+points = detectFASTFeatures(FF_Gray,"MinContrast",0.0001, 'ROI', [150,150, 200, 200]);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+strongest.Location;
+
+
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/935.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Fast Features RGB');
+
+FF_Gray = im2gray(I);
+subplot(1,2,2);
+imshow(FF_Gray);
+title('Grayscale Frame');
+
+% Focuses on an area with low line contrast
+points = detectFASTFeatures(FF_Gray,"MinContrast",0.001,'MinQuality',0.001,  'ROI', [10,10, 400, 450]);
+strongest = selectStrongest(points,150);
+imshow(I);hold on;
+plot(strongest);
+strongest.Location;
+
+
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/2.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Fast Features RGB');
+
+FF_Gray = im2gray(I);
+subplot(1,2,2);
+imshow(FF_Gray);
+title('Grayscale Frame');
+
+% Focuses on an area with low line contrast
+points = detectFASTFeatures(FF_Gray,"MinContrast",0.001,'MinQuality',0.001,  'ROI', [10,10, 400, 450]);
+strongest = selectStrongest(points,150);
+imshow(I);hold on;
+plot(strongest);
+strongest.Location;
+
+
+
+%% **********************Fast Features seem best for finding high contrast areas like Pins********************
