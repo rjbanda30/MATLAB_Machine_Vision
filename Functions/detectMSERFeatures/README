@@ -52,4 +52,5 @@
 					® As the water fills into the bucket, it overflows and the next bucket starts filling up
 					® Smaller regions of water join and become bigger bodies of water, and finally the whole area gets filled
 					® As water is filling up into a bucket, it is checked against the MSER stability criterion
-          ® Regions appear, grow and merge at different intensity thresholds
+          				® Regions appear, grow and merge at different intensity thresholds
+					
