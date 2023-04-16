@@ -67,5 +67,3 @@ imshow(I)
 hold on
 plot(points,'ShowScale',false)
 hold off
-
-
