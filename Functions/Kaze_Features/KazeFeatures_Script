@@ -1,0 +1,83 @@
+Kaze Features seem best for finding letter areas
+
+
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/955.png';
+I = imread (path);
+subplot(4,2,1);
+imshow(I)
+title('Kaze Features RGB 1');
+
+HF_Gray = im2gray(I);
+subplot(4,2,2);
+imshow(HF_Gray);
+%% Default values
+points = detectKAZEFeatures(HF_Gray,"Diffusion","region","Threshold",0.003,"NumOctaves",3,"NumScaleLevels",4);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 1');
+strongest.Location;
+
+
+
+% Load Sample Frames
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/955.png';
+I = imread (path);
+subplot(4,2,3);
+imshow(I)
+title('Kaze Features RGB 2');
+
+HF_Gray = im2gray(I);
+subplot(4,2,4);
+imshow(HF_Gray);
+
+% Threshhold is local extrema; NumbOctaves[1,4] is positive integer-->Increase
+% to detect larger values; NumScaleLevels-->[3,10] smoother scale changes
+points = detectKAZEFeatures(HF_Gray,"Diffusion","sharpedge","Threshold",0.00001,"NumOctaves",3,"NumScaleLevels",10);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 2');
+strongest.Location;
+
+
+
+% Load Sample Frames
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/922.png';
+I = imread (path);
+subplot(4,2,5);
+imshow(I)
+title('Kaze Features RGB 3');
+
+HF_Gray = im2gray(I);
+subplot(4,2,6);
+imshow(HF_Gray);
+points = detectKAZEFeatures(HF_Gray,"Diffusion","region","Threshold",0.006,"NumOctaves",4,"NumScaleLevels",5);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 3');
+strongest.Location;
+
+
+
+% Load Sample Frames
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1120.png';
+I = imread (path);
+subplot(4,2,7);
+imshow(I)
+title('Kaze Features RGB 4');
+
+HF_Gray = im2gray(I);
+subplot(4,2,8);
+imshow(HF_Gray);
+points = detectKAZEFeatures(HF_Gray,"Diffusion","region","Threshold",0.001,"NumOctaves",3,"NumScaleLevels",10);
+strongest = selectStrongest(points,50);
+imshow(I);hold on;
+plot(strongest);
+title('Grayscale Frame 4');
+strongest.Location;
+
+
