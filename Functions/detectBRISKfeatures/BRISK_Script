@@ -1,68 +1,68 @@
-% % Load Sample Frames
-% clear all;
-% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
-% I = imread (path);
-% subplot(1,2,1);
-% imshow(I)
-% title('Pic');
-% 
-% grayFrame = im2gray(I);
-% subplot(1,2,2);
-% imshow(grayFrame);
-% title('Grayscale Frame');
-% 
-% points = detectBRISKFeatures(grayFrame);
-% strongest = selectStrongest(points,10);
-% imshow(I);hold on;
-% plot(strongest);
-% strongest.Location;
-% 
-% 
-% 
-% Increasing MinQuality value reduces the number of edge detections
-% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/3.png';
-% I = imread (path);
-% subplot(1,2,1);
-% imshow(I)
-% title('Pic');
-% grayFrame = im2gray(I);
-% subplot(1,2,2);
-% imshow(grayFrame);
-% title('Grayscale Frame');
-% points = detectBRISKFeatures(grayFrame,'MinContrast',0.02);
-% strongest = selectStrongest(points,20);
-% imshow(grayFrame);hold on
-% plot(strongest);
-% 
-% Increasing MinQuality value reduces the number of edge detections
-% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/37.png';
-% I = imread (path);
-% subplot(1,2,1);
-% imshow(I)
-% title('Pic');
-% grayFrame = im2gray(I);
-% subplot(1,2,2);
-% imshow(grayFrame);
-% title('Grayscale Frame');
-% points = detectBRISKFeatures(grayFrame,'MinContrast',0.03);
-% strongest = selectStrongest(points,20);
-% imshow(grayFrame);hold on
-% plot(strongest);
-% 
-% Increasing MinQuality value reduces the number of edge detections
-% path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/922.png';
-% I = imread (path);
-% subplot(1,2,1);
-% imshow(I)
-% title('Pic');
-% grayFrame = im2gray(I);
-% subplot(1,2,2);
-% imshow(grayFrame);
-% title('Grayscale Frame');
-% points = detectBRISKFeatures(grayFrame,'MinContrast',0.01);
-% strongest = selectStrongest(points,20);
-% imshow(grayFrame);hold on
-% plot(strongest);
+% Load Sample Frames
+clear all;
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/1.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Pic');
+
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+title('Grayscale Frame');
+
+points = detectBRISKFeatures(grayFrame);
+strongest = selectStrongest(points,10);
+imshow(I);hold on;
+plot(strongest);
+strongest.Location;
+
+
+
+Increasing MinQuality value reduces the number of edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/3.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+title('Grayscale Frame');
+points = detectBRISKFeatures(grayFrame,'MinContrast',0.02);
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
+
+Increasing MinQuality value reduces the number of edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/37.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+title('Grayscale Frame');
+points = detectBRISKFeatures(grayFrame,'MinContrast',0.03);
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
+
+Increasing MinQuality value reduces the number of edge detections
+path = 'C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Test_Images_470x470/922.png';
+I = imread (path);
+subplot(1,2,1);
+imshow(I)
+title('Pic');
+grayFrame = im2gray(I);
+subplot(1,2,2);
+imshow(grayFrame);
+title('Grayscale Frame');
+points = detectBRISKFeatures(grayFrame,'MinContrast',0.01);
+strongest = selectStrongest(points,20);
+imshow(grayFrame);hold on
+plot(strongest);
 
 
 
@@ -127,6 +127,6 @@ imshow(grayFrame);hold on
 plot(strongest);
 
 
-%%%%%%%%%********************* Brisk Features seem best for finding high contrast areas like Pins *****************%%%%%%%%%%%
+%% ***************************************** Brisk Features seem best for finding high contrast areas like Pins ****************************************************
 
 
