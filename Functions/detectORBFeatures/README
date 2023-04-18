@@ -1,1 +1,27 @@
-
+	• detectORBFeatures
+		® Oriented FAST and rotated BRIEF feature detection method algorithm
+		® The ORB keypoints are detected in regions with high intensity variance, typically discernable from inflection points
+		® Input Arguments
+			◊ I - Input image (M-by-N grayscale image)
+				} Specified in grayscale
+				} Must be real and nonsparse
+		® Name-Value Arguments
+			◊ ScaleFactor - Scale factor for image decomposition (1.2 - default)
+				} Scale factor for image decomposition, specified as the comma-separated pair consisting of 'ScaleFactor' and a scalar greater than 1
+				} The scale value at each level of decomposition ScaleFactor(level-1), where level is any value in the range [0, NumLevels-1]
+				} Given the input image of size M-by-N, the image size at each level of decomposition is M/(ScaleFactor^(level−1))  −by − N/(ScaleFactor^(level−1))
+			◊ NumLevels - Number of decomposition levels (8 - default)
+				} Number of decomposition levels, specified as the comma-separated pair consisting of 'NumLevels' and a scalar greater than or equal to 1
+				} Increase this value to extract keypoints from the image at more levels of decomposition
+				} The number of decomposition levels for extrating keypoints is limited by the image size at that level
+				} The image size at a level of decomposition must be at least 63-by-63 for detecting keypoints
+				} The maximum level of decomposition is calculated as levelmax = floor((log⁡(min⁡(M,N) )−log⁡(63))/(log⁡(ScaleFactor))) + 1
+				} If either the default value or the specified value of 'NumLevels' is greater than levelmax the function modifies NumLevels to levelmax and returns a warning
+			◊ ROI - Region of interest [1 1 M N] 
+				} Region
+		® Output Arguments
+			◊ points - ORB keypoints
+				} ORB keypoints, returned as an ORBPoints object. The object contains information about keypoints detected in the input image
+		® Algorithms
+			◊ The function detects keypoints from the input image by using the ORB feature detection method in "ORB: An Efficient Alternative to SIFT or SURF"
+        } Note references
