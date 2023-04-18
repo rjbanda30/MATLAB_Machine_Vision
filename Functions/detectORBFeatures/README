@@ -24,4 +24,4 @@
 				} ORB keypoints, returned as an ORBPoints object. The object contains information about keypoints detected in the input image
 		® Algorithms
 			◊ The function detects keypoints from the input image by using the ORB feature detection method in "ORB: An Efficient Alternative to SIFT or SURF"
-        } Note references
+        			} Note references
