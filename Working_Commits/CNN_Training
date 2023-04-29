@@ -1,83 +1,116 @@
 clear all;
 close all;
 % % Converts features to gray frame
-% 
+
 %I0 = imread ('rec1.jpg')
-% I1 = rgb2gray(I0)
-% 
-% I_pts = detectSURFFeatures(I1)
-% [I_features, I_valid_Pts] = extractFeatures(I1,I_pts)
-%figure;imshow(I0);
-% hold on; plot(I_pts.selectStrongest(50))
+%I1 = rgb2gray(I0)
 
-File_Path = "C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/RGB_IC_Data_470X470";
-Digit_Data_Set_Path = fullfile(File_Path)
-imds = imageDatastore(Digit_Data_Set_Path,'IncludeSubfolders',false,'LabelSource','foldernames')
+File_Path = "C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/PCBA_Classifications";
+Component_Data_Set_Path = fullfile(File_Path)
+imds = imageDatastore(Component_Data_Set_Path,'IncludeSubfolders',true,'LabelSource','foldernames')
 
-%figure; imshow(imds.Files{1000})
-%img = imresize(I0, [164, 326])
-%imshow(img)
-% Split the trainging data
+
+%Split the trainging data
 Frac_Train_Files = 0.6
 Frac_Val_Files = 0.2
 Frac_Test_Files = 0.2
 [Imds_Train, Imds_Validation,Imds_Test] = splitEachLabel(imds, Frac_Train_Files,Frac_Val_Files,Frac_Test_Files,'randomize');
 
 Layers = [
-% Defines the input layer as a 470x470 pixels with a three colored channel 
-    imageInputLayer([470 470 3])
+%Defines the input layer as a 28x28 pixels with a three colored channel 
+    imageInputLayer([470 470 3],"Normalization","rescale-zero-one","NormalizationDimension","auto")
 
-% Defines a convolusional 2D Filter; Here defined as a ten 3x3 filter
+%Defines a convolusional 2D Filter; Here defined as a ten 3x3 filter
 % There are 9 parameters plus one bias parameter; This is 10 parameters/filter
-% This creates ten filters; each contains 10 470x470 matrices plus the 1 bias
-    convolution2dLayer(3,10,'Padding','same')
+% This creates ten filters; each contains 10 28x28 matrices plus the 1 bias
+% Width is reduced by (F-1) where F is the size of the filter that runs
+% accross the original image
+% Here we have a 3-->3x3 filter providing 3 feature maps with 0s for paddin
+% around image--(number of filters, number of feature maps, padding, size % of padding)
+% This number corresponds to the number of neurons in the layer that 
+% connect to the same region in the input. This parameter determines the number 
+% of channels (feature maps) in the layer output
 
-% Normalizes the batch layers
+    convolution2dLayer(3,4,'Padding','same')
+
+%Normalizes the batch layers
     batchNormalizationLayer
 
 % Creates a Relu Layer that creates a activation function that introduces
 % none-linearity into the system by making any value less than zero equal
 % to zero and keeping any value above zero its original value
-    reluLayer
+    reluLayer('Name','relu1')
+
 % Decreases size of internal networks by compressing to a max 2D layer to
-% keep computations and memory low. This is now a 10 channel 235x235 network
+% keep computations and memory low. This divides the Hieght and width by 2.
+% The formula being W2 = ((W1 - F + 2P)/S) + 1 where S = stride. Stride
+% defines the intervals at which the filter is applied.
     maxPooling2dLayer(2,'Stride',2)
 
-% This creates ten filters; each contains 10 3x3 matrices plus the 1 bias
-% This creates one inpute parameter for each input channel; Swithcing to 3, 1 will not give errors but slow
-    convolution2dLayer(3,10,'Padding','same')
+%This creates ten filters; each contains 10 3x3 matrices plus the 1 bias
+%This creates one inpute parameter for each input channel
+    convolution2dLayer(3,2,'Padding','same')
 
-% Normalizes the batch layers
+%Normalizes the batch layers
     batchNormalizationLayer
 
-% Creates anoter Relu Layer that creates a activation function that introduces
-% none-linearity into the system by making any value less than zero equal
-% to zero and keeping any value above zero its original value
-    reluLayer
+%Creates anoter Relu Layer that creates a activation function that introduces
+%none-linearity into the system by making any value less than zero equal
+%to zero and keeping any value above zero its original value
+    reluLayer('Name','relu2')
 
-% creates an output structure that forms 1 classification layer classes assigning them
-% to nodes
-    fullyConnectedLayer(1)
+%creates an output structure that forms 1 classes assigning them
+%to nodes
+    fullyConnectedLayer(2)
 
-% Assigns cos function and ensure popability are computed correctly
+%Assigns cos function and ensure popability are computed correctly
     softmaxLayer
     classificationLayer
 ]
 
 options = trainingOptions('sgdm',...
-    'InitialLearnRate', 0.01,...
-    'MaxEpoch',100, 'Shuffle','every-epoch',...
+    'InitialLearnRate', 0.0001,...
+    'MaxEpoch',10, 'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'ValidationFrequency', 30,...
+    'Verbose', false,...
+    'Plots','training-progress',  MiniBatchSize=20)
+
+net = trainNetwork(Imds_Train,Layers, options)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
+
+
+% Define the augmentation settings
+augmenter = imageDataAugmenter( ...
+    'RandRotation', [-20, 20], ... % Randomly rotate images by -20 to 20 degrees
+    'RandXReflection', true, ...   % Randomly flip images horizontally
+    'RandYReflection', true, ...   % Randomly flip images vertically
+    'RandScale', [0.5, 1.5] ...    % Randomly scale the images between 0.5 and 1.5 times
+);
+augmentedTrainingData = augmentedImageDatastore([470, 470, 3], Imds_Train, 'DataAugmentation', augmenter);
+
+
+options = trainingOptions('sgdm',...
+    'InitialLearnRate', 0.0001,...
+    'MaxEpoch',2, 'Shuffle','every-epoch',...
     'ValidationData',Imds_Validation,...
     'ValidationFrequency', 30,...
     'Verbose', false,...
     'Plots','training-progress')
 
-net = trainNetwork(Imds_Train,Layers, options)
-%reads new image
-img = imread('rec1_output.jpg')
-% Predicts
-predicted_class = classify(net,img)
-% shows....The new images need to be of 470x470 size. the resizing blurs the quality of the high quality images and need some preprocessing to make work better. 
-% We may need to find a more robust solution to resizing all images to 470x470.
-imshow(img)
-title(predicted_class)
+net1 = trainNetwork(Imds_Train,Layers, options)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
