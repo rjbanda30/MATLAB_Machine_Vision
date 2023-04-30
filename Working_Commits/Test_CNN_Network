@@ -1,0 +1,13 @@
+File_Path = "C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Integrated_Circuit";
+Digit_Data_Set_Path = fullfile(File_Path)
+imds = imageDatastore(Digit_Data_Set_Path,'IncludeSubfolders',true,'LabelSource','foldernames')
+%figure; imshow(imds.Files{20})
+
+
+prediction = classify(net,imds)
+actual = imds.Labels
+correct = sum(prediction == actual)
+total = numel(actual)
+accuracy = correct/total
+figure; plotconfusion(actual, prediction)
+figure; cm = confusionchart(actual,prediction);
