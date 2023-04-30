@@ -1,0 +1,181 @@
+clear all;
+close all;
+% % Converts features to gray frame
+
+%I0 = imread ('rec1.jpg')
+%I1 = rgb2gray(I0)
+
+File_Path = "C:/Users/Raymond/Documents/MATLAB/Live_Scripts/Machine_Vision/Components";
+Component_Data_Set_Path = fullfile(File_Path)
+imds = imageDatastore(Component_Data_Set_Path,'IncludeSubfolders',true,'LabelSource','foldernames')
+
+%Split the trainging data
+Frac_Train_Files = 0.6
+Frac_Val_Files = 0.2
+Frac_Test_Files = 0.2
+[Imds_Train, Imds_Validation,Imds_Test] = splitEachLabel(imds, Frac_Train_Files,Frac_Val_Files,Frac_Test_Files,'randomize');
+
+Layers = [
+%Defines the input layer as a 28x28 pixels with a three colored channel 
+    imageInputLayer([470 470 3],"Normalization","rescale-zero-one","NormalizationDimension","auto")
+
+%Defines a convolusional 2D Filter; Here defined as a ten 3x3 filter
+% There are 9 parameters plus one bias parameter; This is 10 parameters/filter
+% This creates ten filters; each contains 10 28x28 matrices plus the 1 bias
+% Width is reduced by (F-1) where F is the size of the filter that runs
+% accross the original image
+% Here we have a 3-->3x3 filter providing 3 feature maps with 0s for paddin
+% around image--(number of filters, number of feature maps, padding, size % of padding)
+% This number corresponds to the number of neurons in the layer that 
+% connect to the same region in the input. This parameter determines the number 
+% of channels (feature maps) in the layer output
+
+    convolution2dLayer(2,4,'Padding','same')
+
+%Normalizes the batch layers
+    batchNormalizationLayer
+
+% Creates a Relu Layer that creates a activation function that introduces
+% none-linearity into the system by making any value less than zero equal
+% to zero and keeping any value above zero its original value
+    reluLayer('Name','relu1')
+
+% Decreases size of internal networks by compressing to a max 2D layer to
+% keep computations and memory low. This divides the Hieght and width by 2.
+% The formula being W2 = ((W1 - F + 2P)/S) + 1 where S = stride. Stride
+% defines the intervals at which the filter is applied.
+    maxPooling2dLayer(2,'Stride',2)
+
+%This creates ten filters; each contains 10 3x3 matrices plus the 1 bias
+%This creates one inpute parameter for each input channel
+    convolution2dLayer(2,2,'Padding','same')
+
+%Normalizes the batch layers
+    batchNormalizationLayer
+
+%Creates anoter Relu Layer that creates a activation function that introduces
+%none-linearity into the system by making any value less than zero equal
+%to zero and keeping any value above zero its original value
+    reluLayer('Name','relu2')
+
+%creates an output structure that forms 1 classes assigning them
+%to nodes
+    fullyConnectedLayer(4)
+
+%Assigns cos function and ensure popability are computed correctly
+    softmaxLayer
+    classificationLayer
+]
+% sgdm is an optimizer
+% L2Regularization is regularization parameter
+options_0 = trainingOptions('sgdm',...
+    'InitialLearnRate', 0.0001,...
+    'MaxEpoch',3,...
+    'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'LearnRateSchedule','piecewise', ...
+    'LearnRateDropFactor',0.2,...
+    'LearnRateDropPeriod',5,...
+    'L2Regularization',0.01,...
+    'ValidationFrequency', 1785,...
+    'Verbose', false,...
+    'Plots','training-progress', MiniBatchSize=20)
+
+net_0 = trainNetwork(Imds_Train,Layers, options_0)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
+
+% sgdm is an optimizer
+% L2Regularization is regularization parameter
+options_1 = trainingOptions('sgdm',...
+    'InitialLearnRate', 0.0001,...
+    'MaxEpoch',3,...
+    'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'LearnRateSchedule','piecewise', ...
+    'LearnRateDropFactor',0.2,...
+    'LearnRateDropPeriod',5,...
+    'L2Regularization',0.01,...
+    'ValidationFrequency', 1785,...
+    'Verbose', false,...
+    'Plots','training-progress', MiniBatchSize=20)
+
+net_1 = trainNetwork(Imds_Train,net.Layers, options_1)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
+
+
+% Define the augmentation settings
+augmenter = imageDataAugmenter( ...
+       'RandScale', [0.001, 1.5] ...    % Randomly scale the images between 0.001 and 1.5 times
+);
+augmentedTrainingData = augmentedImageDatastore([470, 470, 3], Imds_Train, 'DataAugmentation', augmenter);
+%     'RandRotation', [-20, 20], ... % Randomly rotate images by -20 to 20 degrees
+%     'RandXReflection', true, ...   % Randomly flip images horizontally
+%     'RandYReflection', true, ...   % Randomly flip images vertically
+
+
+
+% sgdm is an optimizer
+% L2Regularization is regularization parameter
+options_2 = trainingOptions('sgdm',...
+    'InitialLearnRate', 0.001,...
+    'MaxEpoch',3,...
+    'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'LearnRateSchedule','piecewise', ...
+    'LearnRateDropFactor',0.2,...
+    'LearnRateDropPeriod',5,...
+    'L2Regularization',0.01,...
+    'ValidationFrequency', 1785,...
+    'Verbose', false,...
+    'Plots','training-progress', MiniBatchSize=20)
+
+net_2 = trainNetwork(augmentedTrainingData,net.Layers, options_2)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
+
+
+% sgdm is an optimizer
+% L2Regularization is regularization parameter
+options_3 = trainingOptions('adam',...
+    'InitialLearnRate', 0.001,...
+    'MaxEpoch',3,...
+    'Shuffle','every-epoch',...
+    'ValidationData',Imds_Validation,...
+    'LearnRateSchedule','piecewise', ...
+    'LearnRateDropFactor',0.2,...
+    'LearnRateDropPeriod',5,...
+    'L2Regularization',0.01,...
+    'ValidationFrequency', 1785,...
+    'Verbose', false,...
+    'Plots','training-progress', MiniBatchSize=20)
+
+net_3 = trainNetwork(augmentedTrainingData,net.Layers, options_3)
+
+YPred = classify(net,Imds_Test);
+YTest = Imds_Test.Labels;
+
+accuracy = sum(YPred == YTest)/numel(YTest)
+
+ind = find(YPred ~= YTest);
+% figure; 
+
